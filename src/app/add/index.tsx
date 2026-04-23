@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router"
-import React, { useCallback, useState } from "react"
+import React from "react"
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -13,35 +13,36 @@ import { imageAssetSchema } from "@/lib/schemas"
 import { toSpacing } from "@/utils/theme"
 import { zodResolver } from "@hookform/resolvers/zod"
 
+import { useMutation } from "@tanstack/react-query"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
+
+const addFormSchema = z.object({
+  author: z.string().min(5),
+  description: z.string().min(10),
+  image: imageAssetSchema(),
+})
 
 export default function AddScreen() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
 
   const form = useForm({
-    resolver: zodResolver(
-      z.object({
-        author: z.string().min(5),
-        description: z.string().min(10),
-        image: imageAssetSchema(),
-      })
-    ),
+    resolver: zodResolver(addFormSchema),
   })
 
-  const [loading, setLoading] = useState(false)
+  const { mutate, isPending } = useMutation({
+    mutationFn: (_values: z.infer<typeof addFormSchema>) =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 2000)
+      }),
+    onSuccess: () =>
+      Alert.alert("Success", "Image added successfully!", [{ text: "OK", onPress: () => router.back() }]),
+  })
 
-  const handleSubmit = useCallback(() => {
-    setLoading(true)
-
-    setTimeout(() => {
-      setLoading(false)
-      Alert.alert("Success", "Image added successfully!", [{ text: "OK", onPress: () => router.back() }])
-    }, 2000)
-  }, [router])
-
-  const onSubmit = form.handleSubmit(handleSubmit)
+  const onSubmit = form.handleSubmit((values) => mutate(values))
 
   return (
     <ThemedView style={styles.container}>
@@ -79,7 +80,7 @@ export default function AddScreen() {
           <ThemedButton
             style={styles.submitButton}
             onPress={onSubmit}
-            isLoading={loading}
+            isLoading={isPending}
             size="lg"
             title="Upload Image"
           />
