@@ -101,5 +101,6 @@ const styles = StyleSheet.create({
 
   submitButton: {
     marginHorizontal: toSpacing(4),
+    marginTop: toSpacing(5),
   },
 })

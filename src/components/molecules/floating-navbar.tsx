@@ -1,6 +1,6 @@
 import { Link, usePathname } from "expo-router"
-import React, { useState } from "react"
-import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, View } from "react-native"
+import React, { useEffect, useRef, useState } from "react"
+import { Animated, Keyboard, KeyboardAvoidingView, Platform, Pressable, StyleSheet, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { radius } from "@/constants/theme"
@@ -18,79 +18,118 @@ export default function FloatingNavbar() {
   const insets = useSafeAreaInsets()
 
   const [isSearchVisible, setIsSearchVisible] = useState(false)
+  const keyboardOffset = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    if (Platform.OS !== "android") return
+
+    const showSub = Keyboard.addListener("keyboardDidShow", (e) => {
+      Animated.timing(keyboardOffset, {
+        toValue: e.endCoordinates.height,
+        duration: 150,
+        useNativeDriver: true,
+      }).start()
+    })
+
+    const hideSub = Keyboard.addListener("keyboardDidHide", () => {
+      Animated.timing(keyboardOffset, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }).start()
+    })
+
+    return () => {
+      showSub.remove()
+      hideSub.remove()
+    }
+  }, [keyboardOffset])
 
   const toggleSearch = () => setIsSearchVisible((prev) => !prev)
 
   return (
-    <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
-      <View style={[styles.container, { paddingBottom: insets.bottom + 20 }]}>
-        {isSearchVisible && (
-          <View style={styles.searchInputWrapper}>
-            <ThemedTextInput placeholder="Search images..." style={styles.searchInput} />
-          </View>
-        )}
+    <KeyboardAvoidingView
+      style={styles.keyboardAvoidingView}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={0}
+    >
+      <Animated.View
+        style={[
+          styles.animatedWrapper,
+          Platform.OS === "android" && {
+            transform: [{ translateY: Animated.multiply(keyboardOffset, -1) }],
+          },
+        ]}
+      >
+        <View style={[styles.container, { paddingBottom: insets.bottom + 20 }]}>
+          {isSearchVisible && (
+            <View style={styles.searchInputWrapper}>
+              <ThemedTextInput placeholder="Search images..." style={styles.searchInput} autoFocus />
+            </View>
+          )}
 
-        <View
-          style={[
-            styles.navbarPill,
-            {
-              backgroundColor: toTheme("card"),
-            },
-          ]}
-        >
-          <Link
+          <View
             style={[
-              styles.navItem,
-
-              pathname === "/" && {
-                backgroundColor: toTheme("background"),
+              styles.navbarPill,
+              {
+                backgroundColor: toTheme("card"),
               },
             ]}
-            asChild
-            href="/"
           >
-            <Pressable>
-              <HouseIcon
-                color={pathname === "/" ? toTheme("muted") : undefined}
+            <Link
+              style={[
+                styles.navItem,
+
+                pathname === "/" && {
+                  backgroundColor: toTheme("background"),
+                },
+              ]}
+              asChild
+              href="/"
+            >
+              <Pressable>
+                <HouseIcon
+                  color={pathname === "/" ? toTheme("muted") : undefined}
+                  height={toSpacing(4)}
+                  width={toSpacing(4)}
+                />
+              </Pressable>
+            </Link>
+
+            <Link
+              style={[
+                styles.addButton,
+                {
+                  backgroundColor: toTheme("primary"),
+                  shadowColor: Platform.select({ ios: toTheme("primary") }),
+                },
+              ]}
+              href="/add"
+              asChild
+            >
+              <Pressable>
+                <PlusIcon height={toSpacing(4)} width={toSpacing(4)} />
+              </Pressable>
+            </Link>
+
+            <Pressable
+              onPress={toggleSearch}
+              style={[
+                styles.navItem,
+                isSearchVisible && {
+                  backgroundColor: toTheme("background"),
+                },
+              ]}
+            >
+              <MagnifyingGlassIcon
                 height={toSpacing(4)}
                 width={toSpacing(4)}
+                color={isSearchVisible ? toTheme("muted-foreground") : undefined}
               />
             </Pressable>
-          </Link>
-
-          <Link
-            style={[
-              styles.addButton,
-              {
-                backgroundColor: toTheme("primary"),
-                shadowColor: Platform.select({ ios: toTheme("primary") }),
-              },
-            ]}
-            href="/add"
-            asChild
-          >
-            <Pressable>
-              <PlusIcon height={toSpacing(4)} width={toSpacing(4)} />
-            </Pressable>
-          </Link>
-
-          <Pressable
-            onPress={toggleSearch}
-            style={[
-              styles.navItem,
-              isSearchVisible && {
-                backgroundColor: toTheme("background"),
-              },
-            ]}
-          >
-            <MagnifyingGlassIcon
-              height={toSpacing(4)}
-              width={toSpacing(4)}
-              color={isSearchVisible ? toTheme("muted-foreground") : undefined}
-            />
-          </Pressable>
+          </View>
         </View>
-      </View>
+      </Animated.View>
     </KeyboardAvoidingView>
   )
 }
@@ -102,6 +141,10 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 1000,
+  },
+  animatedWrapper: {
+    alignItems: "center",
+    width: "100%",
   },
   container: {
     alignItems: "center",

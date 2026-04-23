@@ -8,6 +8,7 @@ import ThemedView from "@/components/atoms/themed-view"
 import ChevronLeft from "@/components/icons/chevron-left"
 import ImageGallery from "@/components/organisms/image-gallery"
 import { fontSize } from "@/constants/theme"
+import { blurhash } from "@/lib/expo-image"
 import satellite from "@/lib/satellite"
 import { PicsumImage } from "@/types/picsum"
 import { toSpacing } from "@/utils/theme"
@@ -44,7 +45,13 @@ export default function DetailScreen() {
             >
               <ThemedButton icon={<ChevronLeft />} />
             </Link>
-            <Image source={{ uri: data?.download_url }} style={styles.image} contentFit="cover" transition={300} />
+            <Image
+              placeholder={{ blurhash }}
+              source={{ uri: data?.download_url }}
+              style={styles.image}
+              contentFit="cover"
+              transition={300}
+            />
 
             <ThemedView style={styles.content}>
               <ThemedView style={{ gap: toSpacing(1) }}>
