@@ -6,11 +6,12 @@ import { radius } from "@/constants/theme"
 import { useToTheme } from "@/hooks/use-to-theme"
 import { useFormFieldContext } from "@/providers/form-field"
 import { toSpacing } from "@/utils/theme"
+import { Image } from "expo-image"
 
 import { launchImageLibraryAsync, requestMediaLibraryPermissionsAsync } from "expo-image-picker"
 import React, { FC, useCallback } from "react"
 import { useController } from "react-hook-form"
-import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 export interface ImagePickerFieldProps {
   label?: string
@@ -75,7 +76,7 @@ export const ImagePickerField: FC<ImagePickerFieldProps> = ({
     >
       {hasImage ? (
         <View style={styles.previewContainer}>
-          <Image source={{ uri: value.uri }} style={styles.preview} resizeMode="cover" />
+          <Image source={{ uri: value.uri }} style={styles.preview} contentFit="cover" />
           <Pressable
             style={styles.removeButton}
             onPress={(e) => {
