@@ -98,7 +98,7 @@ const FloatingNavbar: FC<FloatingNavbarProps> = ({ search, onSearchChange }) => 
               asChild
               href="/"
             >
-              <Pressable>
+              <Pressable accessibilityRole="button" accessibilityLabel="Home">
                 <HouseIcon
                   color={pathname === "/" ? toTheme("muted") : undefined}
                   height={toSpacing(4)}
@@ -118,7 +118,7 @@ const FloatingNavbar: FC<FloatingNavbarProps> = ({ search, onSearchChange }) => 
               href="/add"
               asChild
             >
-              <Pressable>
+              <Pressable accessibilityRole="button" accessibilityLabel="Add">
                 <PlusIcon height={toSpacing(4)} width={toSpacing(4)} />
               </Pressable>
             </Link>
@@ -131,6 +131,8 @@ const FloatingNavbar: FC<FloatingNavbarProps> = ({ search, onSearchChange }) => 
                   backgroundColor: toTheme("background"),
                 },
               ]}
+              accessibilityRole="button"
+              accessibilityLabel="Search"
             >
               <MagnifyingGlassIcon
                 height={toSpacing(4)}

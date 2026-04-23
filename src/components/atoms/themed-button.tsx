@@ -9,7 +9,7 @@ import { toSpacing } from "@/utils/theme"
 import { FC } from "react"
 import { PressableProps } from "react-native"
 
-type ButtonVariant = "primary" | "link"
+type ButtonVariant = "primary" | "link" | "none"
 
 interface ThemedButtonProps extends PressableProps {
   variant?: ButtonVariant
@@ -72,6 +72,7 @@ const ThemedButton: FC<ThemedButtonProps> = ({
         style && typeof style === "function" ? style?.(s) : style,
       ]}
       disabled={disabled || isLoading}
+      accessibilityRole="button"
       {...props}
     >
       {isLoading ? (

@@ -80,7 +80,7 @@ export const ImagePickerField: FC<ImagePickerFieldProps> = ({
           <Pressable
             style={styles.removeButton}
             onPress={(e) => {
-              e.stopPropagation?.()
+              e?.stopPropagation?.()
               handleRemove()
             }}
             accessibilityLabel="Remove image"
