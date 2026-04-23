@@ -1,18 +1,22 @@
 import { Image } from "expo-image"
-import { Stack, useLocalSearchParams } from "expo-router"
+import { Link, Stack, useLocalSearchParams } from "expo-router"
 import { StyleSheet, View } from "react-native"
 
+import ThemedButton from "@/components/atoms/themed-button"
 import ThemedText from "@/components/atoms/themed-text"
 import ThemedView from "@/components/atoms/themed-view"
+import ChevronLeft from "@/components/icons/chevron-left"
 import ImageGallery from "@/components/organisms/image-gallery"
 import { fontSize } from "@/constants/theme"
 import satellite from "@/lib/satellite"
 import { PicsumImage } from "@/types/picsum"
 import { toSpacing } from "@/utils/theme"
 import { useQuery } from "@tanstack/react-query"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export default function DetailScreen() {
   const { id } = useLocalSearchParams()
+  const { top, left } = useSafeAreaInsets()
   const { data } = useQuery({
     queryKey: ["images", { id }],
     queryFn: ({ signal }) => satellite<PicsumImage>("GET", `https://picsum.photos/id/${id}/info`, { signal }),
@@ -27,6 +31,19 @@ export default function DetailScreen() {
         initialPageParam={40}
         header={
           <ThemedView>
+            <Link
+              href=".."
+              asChild
+              style={[
+                styles.backButton,
+                {
+                  top: top + toSpacing(4),
+                  left: left + toSpacing(4),
+                },
+              ]}
+            >
+              <ThemedButton icon={<ChevronLeft />} />
+            </Link>
             <Image source={{ uri: data?.download_url }} style={styles.image} contentFit="cover" transition={300} />
 
             <ThemedView style={styles.content}>
@@ -59,6 +76,13 @@ export default function DetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  backButton: {
+    backgroundColor: "#FCFCFD",
+    width: toSpacing(8),
+    height: toSpacing(8),
+    position: "absolute",
+    zIndex: 10,
+  },
   container: {
     flex: 1,
   },

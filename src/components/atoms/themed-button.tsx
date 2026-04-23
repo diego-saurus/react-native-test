@@ -1,19 +1,22 @@
-import React, { useMemo } from "react"
+import React, { Fragment, ReactNode, useMemo } from "react"
 import { ActivityIndicator, Pressable, StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native"
 
 import ThemedText from "@/components/atoms/themed-text"
 import { useToTheme } from "@/hooks/use-to-theme"
 
-import { ColorName, fontSize, radius } from "@/constants/theme"
+import { fontSize, radius } from "@/constants/theme"
 import { toSpacing } from "@/utils/theme"
 import { FC } from "react"
 import { PressableProps } from "react-native"
 
+type ButtonVariant = "primary" | "link"
+
 interface ThemedButtonProps extends PressableProps {
-  variant?: ColorName
+  variant?: ButtonVariant
   isLoading?: boolean
   size?: keyof typeof sizes
   title?: string
+  icon?: ReactNode
 }
 
 const sizes = {
@@ -29,6 +32,7 @@ const ThemedButton: FC<ThemedButtonProps> = ({
   disabled,
   style,
   title,
+  icon,
   ...props
 }) => {
   const { toTheme } = useToTheme()
@@ -41,7 +45,17 @@ const ThemedButton: FC<ThemedButtonProps> = ({
           text: { color: toTheme("primary-foreground") },
           indicatorColor: toTheme("primary-foreground"),
         },
-      }) as Record<ColorName, { container: StyleProp<ViewStyle>; text: StyleProp<TextStyle>; indicatorColor: string }>,
+        link: {
+          container: { backgroundColor: "transparent" },
+          text: {
+            color: toTheme("primary"),
+          },
+          indicatorColor: toTheme("primary"),
+        },
+      }) as Record<
+        ButtonVariant,
+        { container: StyleProp<ViewStyle>; text: StyleProp<TextStyle>; indicatorColor: string }
+      >,
     [variant]
   )
 
@@ -63,7 +77,10 @@ const ThemedButton: FC<ThemedButtonProps> = ({
       {isLoading ? (
         <ActivityIndicator color={indicatorColor} />
       ) : (
-        <ThemedText style={[{ fontSize }, text, styles.buttonText]}>{title}</ThemedText>
+        <Fragment>
+          {icon}
+          {title && <ThemedText style={[{ fontSize }, text, styles.buttonText]}>{title}</ThemedText>}
+        </Fragment>
       )}
     </Pressable>
   )

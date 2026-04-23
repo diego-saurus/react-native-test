@@ -22,14 +22,14 @@ const dark: typeof light = {
   foreground: "#e7e9ea",
 
   primary: light.primary,
-  "primary-foreground": light.primary,
+  "primary-foreground": light["primary-foreground"],
 
   destructive: light.destructive,
 
   muted: "#E5E5E6",
   "muted-foreground": "#72767a",
 
-  card: "#0000000",
+  card: "#121212",
 
   icon: "#9BA1A6",
   input: "#22303c",
