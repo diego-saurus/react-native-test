@@ -1,22 +1,12 @@
-import ThemedText from "@/components/atoms/themed-text"
-import ThemedView from "@/components/atoms/themed-view"
-import { StyleSheet } from "react-native"
+import FloatingNavbar from "@/components/molecules/floating-navbar"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 const HomeScreen = () => {
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText>Hello World</ThemedText>
-    </ThemedView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <FloatingNavbar />
+    </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-})
 
 export default HomeScreen

@@ -75,7 +75,7 @@ export const ImagePickerField: FC<ImagePickerFieldProps> = ({
     >
       {hasImage ? (
         <View style={styles.previewContainer}>
-          <Image source={{ uri: value.uri }} style={styles.preview} resizeMode="center" />
+          <Image source={{ uri: value.uri }} style={styles.preview} resizeMode="cover" />
           <Pressable
             style={styles.removeButton}
             onPress={(e) => {

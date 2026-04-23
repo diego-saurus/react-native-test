@@ -10,6 +10,8 @@ const light = {
   muted: "#98A2B3",
   "muted-foreground": "#0f1419",
 
+  card: "#FFFFFF",
+
   icon: "#687076",
   input: "#FCFCFD",
   border: "#D0D5DD",
@@ -27,6 +29,8 @@ const dark: typeof light = {
   muted: "#E5E5E6",
   "muted-foreground": "#72767a",
 
+  card: "#0000000",
+
   icon: "#9BA1A6",
   input: "#22303c",
   border: "#242628",
@@ -43,6 +47,7 @@ export const radius = {
   "2xl": RADIUS_BASE + 4,
   "3xl": RADIUS_BASE + 6,
   "4xl": RADIUS_BASE + RADIUS_BASE,
+  full: 9999,
 } as const
 
 export const fontSize = {

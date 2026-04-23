@@ -1,9 +1,8 @@
-import { fontSize, radius } from "@/constants/theme"
 import { useToTheme } from "@/hooks/use-to-theme"
 import { useFormFieldContext } from "@/providers/form-field"
-import { toSpacing } from "@/utils/theme"
 import { useController } from "react-hook-form"
-import { StyleSheet, TextInput, TextInputProps } from "react-native"
+import { TextInputProps } from "react-native"
+import ThemedTextInput from "../atoms/themed-text-input"
 
 const TextInputField = ({ style, ...props }: Omit<TextInputProps, "editable" | "onChangeText" | "value" | "ref">) => {
   const { name } = useFormFieldContext()
@@ -12,34 +11,15 @@ const TextInputField = ({ style, ...props }: Omit<TextInputProps, "editable" | "
   const { toTheme } = useToTheme()
 
   return (
-    <TextInput
+    <ThemedTextInput
       ref={field.ref}
       editable={field.disabled}
       onChangeText={field.onChange}
       value={field.value?.toString()}
       placeholderTextColor={toTheme("muted")}
-      style={[
-        {
-          backgroundColor: toTheme("input"),
-          color: toTheme("foreground"),
-          borderColor: toTheme("border"),
-          borderWidth: 1,
-        },
-        styles.input,
-        style,
-      ]}
       {...props}
     />
   )
 }
-
-const styles = StyleSheet.create({
-  input: {
-    borderRadius: radius.xl,
-    paddingHorizontal: toSpacing(4),
-    paddingVertical: toSpacing(3.5),
-    fontSize: fontSize.normal,
-  },
-})
 
 export default TextInputField

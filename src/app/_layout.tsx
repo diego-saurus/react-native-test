@@ -1,26 +1,25 @@
 import { useToTheme } from "@/hooks/use-to-theme"
-import { Tabs } from "expo-router"
+import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { Fragment } from "react"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 const RootLayout = () => {
   const { toTheme } = useToTheme()
 
   return (
-    <Fragment>
-      <Tabs
+    <SafeAreaProvider>
+      <Stack
         screenOptions={{
-          headerTitleStyle: { color: toTheme("foreground"), fontWeight: "semibold", textAlign: "center" },
+          headerTitleStyle: { color: toTheme("foreground"), fontWeight: "semibold" },
           headerTitleAlign: "center",
         }}
       >
-        <Tabs.Screen name="index" options={{ title: "Gallery Feeds" }} />
-        <Tabs.Screen name="detail/[id]" options={{ href: null }} />
-        <Tabs.Screen name="add/index" options={{ title: "Add New Image" }} />
-      </Tabs>
+        <Stack.Screen name="index" options={{ title: "Gallery Feeds" }} />
+        <Stack.Screen name="add/index" options={{ title: "Add New Image", presentation: "modal" }} />
+      </Stack>
 
       <StatusBar style="auto" />
-    </Fragment>
+    </SafeAreaProvider>
   )
 }
 export default RootLayout
