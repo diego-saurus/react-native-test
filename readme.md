@@ -1,3 +1,6 @@
+## Notes
+- I dont know what the font using in figma, so i used default expo configuration, but im still applying font size, weight, and color to match figma
+- based on picsum detail api, they didnt provide any information, so i just hardcoded the description and image title. but the author and image still querying from api
 
 ## Package Detail
 This project is created using blank template for simplicity
@@ -20,3 +23,5 @@ For SVG im using online [transform tools](https://transform.tools/svg-to-react-n
 
 ### React Hook form
 Im using react hook form + zod for form handling
+
+
