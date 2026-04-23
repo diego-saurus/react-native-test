@@ -69,9 +69,15 @@ export default function AddScreen() {
               />
             </FormField>
           </FormProvider>
-
-          <ThemedButton onPress={onSubmit} isLoading={loading} size="lg" title="Upload Image" />
         </ScrollView>
+
+        <ThemedButton
+          style={styles.submitButton}
+          onPress={onSubmit}
+          isLoading={loading}
+          size="lg"
+          title="Upload Image"
+        />
       </KeyboardAvoidingView>
     </ThemedView>
   )
@@ -82,9 +88,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    padding: 20,
+    padding: toSpacing(4),
     display: "flex",
     flexDirection: "column",
     gap: toSpacing(5),
+  },
+
+  submitButton: {
+    marginHorizontal: toSpacing(4),
   },
 })

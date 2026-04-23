@@ -20,6 +20,7 @@ export interface ImagePickerFieldProps {
 
 export const ImagePickerField: FC<ImagePickerFieldProps> = ({
   hint = "Upload a high-quality photo from your gallery",
+  label = "Tap To select image",
   aspectRatio = [4, 3],
 }) => {
   const { toTheme } = useToTheme()
@@ -94,7 +95,7 @@ export const ImagePickerField: FC<ImagePickerFieldProps> = ({
         <View style={styles.placeholder}>
           <CameraIcon />
           <View style={styles.placeholderInstruction}>
-            <ThemedText type="defaultSemiBold">Tap To select image</ThemedText>
+            <ThemedText type="defaultSemiBold">{label}</ThemedText>
             <ThemedText style={{ textAlign: "center" }}>{hint}</ThemedText>
           </View>
           <ThemedButton onPress={handlePick} size="sm" title="Select Image" />

@@ -10,7 +10,8 @@ const RootLayout = () => {
     <Fragment>
       <Tabs
         screenOptions={{
-          headerTitleStyle: { color: toTheme("foreground"), fontWeight: "semibold" },
+          headerTitleStyle: { color: toTheme("foreground"), fontWeight: "semibold", textAlign: "center" },
+          headerTitleAlign: "center",
         }}
       >
         <Tabs.Screen name="index" options={{ title: "Gallery Feeds" }} />
