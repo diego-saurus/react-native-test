@@ -3,6 +3,7 @@ import { blurhash } from "@/lib/expo-image"
 import { PicsumImage } from "@/types/picsum"
 import { toSpacing } from "@/utils/theme"
 import { Image } from "expo-image"
+import { Link } from "expo-router"
 import React, { FC } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import ThemedText from "../atoms/themed-text"
@@ -11,14 +12,27 @@ export interface ImageCardProps {
   item: PicsumImage
 }
 
-const ImageCard: FC<ImageCardProps> = ({ item }) => (
-  <TouchableOpacity activeOpacity={0.88} style={styles.card}>
-    <Image placeholder={{ blurhash }} source={{ uri: item.download_url }} style={styles.cardImage} contentFit="cover" />
-    <ThemedText style={styles.cardName} numberOfLines={1}>
-      {item.author}
-    </ThemedText>
-  </TouchableOpacity>
-)
+const ImageCard: FC<ImageCardProps> = ({ item }) => {
+  return (
+    <Link asChild href={`/detail/${item.id}`} style={styles.card}>
+      <Link.Preview />
+
+      <Link.Trigger>
+        <TouchableOpacity activeOpacity={0.88}>
+          <Image
+            placeholder={{ blurhash }}
+            source={{ uri: item.download_url }}
+            style={styles.cardImage}
+            contentFit="cover"
+          />
+          <ThemedText style={styles.cardName} numberOfLines={1}>
+            {item.author}
+          </ThemedText>
+        </TouchableOpacity>
+      </Link.Trigger>
+    </Link>
+  )
+}
 
 const styles = StyleSheet.create({
   safe: {

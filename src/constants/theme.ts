@@ -56,6 +56,7 @@ export const fontSize = {
   normal: 16,
   lg: 18,
   xl: 20,
+  "2xl": 24,
 } as const
 
 export type ColorName = keyof typeof Colors.light

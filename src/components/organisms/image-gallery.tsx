@@ -5,7 +5,7 @@ import satellite from "@/lib/satellite"
 import { PicsumImage } from "@/types/picsum"
 import { toSpacing } from "@/utils/theme"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import React, { FC, useMemo } from "react"
+import React, { ComponentType, FC, JSXElementConstructor, ReactElement, useMemo } from "react"
 import { Dimensions, FlatList, StyleSheet } from "react-native"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
@@ -13,17 +13,19 @@ const numColumns = SCREEN_WIDTH > 600 ? 3 : 2
 
 interface ImageGalleryProps {
   maxPage?: number
+  header?: ReactElement<unknown, string | JSXElementConstructor<any>> | ComponentType<any> | null | undefined
+  initialPageParam?: number
 }
 
-const ImageGallery: FC<ImageGalleryProps> = ({ maxPage = 10 }) => {
+const ImageGallery: FC<ImageGalleryProps> = ({ maxPage = 10, header, initialPageParam = 1 }) => {
   const { data, fetchNextPage, hasNextPage, refetch, isRefetching } = useInfiniteQuery({
-    queryKey: ["images", { maxPage }],
+    queryKey: ["images", { maxPage, initialPageParam }],
     queryFn: ({ pageParam, signal }) =>
       satellite<PicsumImage[]>("GET", "https://picsum.photos/v2/list", {
         signal,
         params: { page: pageParam, limit: 10 },
       }),
-    initialPageParam: 1,
+    initialPageParam,
     getNextPageParam: (_lastPage, _allPage, lastParam) => {
       const nextParam = lastParam + 1
       if (nextParam > maxPage) return undefined
@@ -45,6 +47,8 @@ const ImageGallery: FC<ImageGalleryProps> = ({ maxPage = 10 }) => {
       onEndReached={() => fetchNextPage()}
       keyExtractor={(item) => item.id}
       numColumns={numColumns}
+      onEndReachedThreshold={1}
+      ListHeaderComponent={header}
       ListFooterComponent={
         hasNextPage ? (
           <ThemedView style={styles.footerContainer}>
@@ -64,11 +68,11 @@ const styles = StyleSheet.create({
   },
 
   listContent: {
-    paddingHorizontal: toSpacing(4),
     gap: toSpacing(3),
     paddingBottom: toSpacing(28),
   },
   columnWrapper: {
+    paddingHorizontal: toSpacing(3),
     gap: toSpacing(3),
   },
   footerContainer: {

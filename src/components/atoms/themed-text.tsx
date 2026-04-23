@@ -1,5 +1,6 @@
 import { fontSize } from "@/constants/theme"
 import { ColorName, useThemeColor } from "@/hooks/use-theme-color"
+import { toSpacing } from "@/utils/theme"
 import { StyleSheet, Text, TextProps } from "react-native"
 
 export type ThemedTextProps = TextProps & {
@@ -15,18 +16,18 @@ const ThemedText = ({ style, colorName = "foreground", type = "default", ...rest
 
 const styles = StyleSheet.create({
   default: {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: fontSize.normal,
+    lineHeight: toSpacing(6),
   },
   defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: fontSize.normal,
+    lineHeight: toSpacing(6),
     fontWeight: "600",
   },
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    lineHeight: 32,
+    fontSize: fontSize["2xl"],
+    fontWeight: "semibold",
+    lineHeight: toSpacing(8),
   },
   label: {
     fontSize: fontSize.normal,
@@ -34,13 +35,13 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: fontSize.sm,
-    fontWeight: "500",
     color: "#667085",
-    lineHeight: 20,
+    fontWeight: "regular",
+    lineHeight: toSpacing(5),
   },
   link: {
-    lineHeight: 30,
-    fontSize: 16,
+    lineHeight: toSpacing(7.5),
+    fontSize: fontSize.normal,
     color: "#0a7ea4",
   },
 })
