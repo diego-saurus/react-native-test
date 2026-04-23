@@ -6,6 +6,9 @@ pnpm create expo-app react-native-test --template blank-typescript
 
 ## Package Detail
 
+## Prettier
+For sort import and code styling
+
 ### Router / Navigation
 Im using expo-router for navigation
 ```bash
