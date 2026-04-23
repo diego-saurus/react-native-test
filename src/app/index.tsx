@@ -1,14 +1,14 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ThemedText } from "@/components/atoms/themed-text"
+import { ThemedView } from "@/components/atoms/themed-view"
+import { StyleSheet } from "react-native"
 
 const HomeScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-};
+    <ThemedView style={styles.container}>
+      <ThemedText>Hello World</ThemedText>
+    </ThemedView>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-});
+})
 
-export default HomeScreen;
+export default HomeScreen
