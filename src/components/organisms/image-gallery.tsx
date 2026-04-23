@@ -16,10 +16,17 @@ interface ImageGalleryProps {
   header?: ReactElement<unknown, string | JSXElementConstructor<any>> | ComponentType<any> | null | undefined
   initialPageParam?: number
   contentContainerStyle?: StyleProp<ViewStyle>
+  search?: string
 }
 
-const ImageGallery: FC<ImageGalleryProps> = ({ maxPage = 10, header, initialPageParam = 1, contentContainerStyle }) => {
-  const { data, fetchNextPage, hasNextPage, refetch, isRefetching } = useInfiniteQuery({
+const ImageGallery: FC<ImageGalleryProps> = ({
+  maxPage = 10,
+  header,
+  initialPageParam = 1,
+  contentContainerStyle,
+  search,
+}) => {
+  const { data, fetchNextPage, hasNextPage, refetch, isRefetching, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["images", { maxPage, initialPageParam }],
     queryFn: ({ pageParam, signal }) =>
       satellite<PicsumImage[]>("GET", "https://picsum.photos/v2/list", {
@@ -34,7 +41,12 @@ const ImageGallery: FC<ImageGalleryProps> = ({ maxPage = 10, header, initialPage
     },
   })
 
-  const flattenData = useMemo(() => data?.pages.flatMap((page) => page), [data])
+  const flattenData = useMemo(() => {
+    const images = data?.pages.flatMap((page) => page)
+    if (search) return images?.filter((image) => image.author.toLowerCase().startsWith(search.toLowerCase()))
+
+    return images
+  }, [data, search])
 
   const renderItem = ({ item }: { item: PicsumImage }) => <ImageCard item={item} />
   return (
@@ -51,7 +63,7 @@ const ImageGallery: FC<ImageGalleryProps> = ({ maxPage = 10, header, initialPage
       onEndReachedThreshold={1}
       ListHeaderComponent={header}
       ListFooterComponent={
-        hasNextPage ? (
+        isFetchingNextPage ? (
           <ThemedView style={styles.footerContainer}>
             {Array.from({ length: numColumns }).map((_, id) => (
               <ImageCardSkeleton key={id} />

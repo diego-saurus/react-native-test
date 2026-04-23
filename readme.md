@@ -1,6 +1,7 @@
 ## Notes
 - I dont know what the font using in figma, so i used default expo configuration, but im still applying font size, weight, and color to match figma
 - based on picsum detail api, they didnt provide any information, so i just hardcoded the description and image title. but the author and image still querying from api
+- The api also didnt provide any search mechanisms, so i just use local search
 
 ## Package Detail
 This project is created using blank template for simplicity

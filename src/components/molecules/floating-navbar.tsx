@@ -1,5 +1,5 @@
 import { Link, usePathname } from "expo-router"
-import React, { useEffect, useRef, useState } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { Animated, Keyboard, KeyboardAvoidingView, Platform, Pressable, StyleSheet, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -11,7 +11,12 @@ import HouseIcon from "../icons/house"
 import MagnifyingGlassIcon from "../icons/magnifying-glass"
 import PlusIcon from "../icons/plus"
 
-export default function FloatingNavbar() {
+interface FloatingNavbarProps {
+  search?: string
+  onSearchChange?: (value: string) => void
+}
+
+const FloatingNavbar: FC<FloatingNavbarProps> = ({ search, onSearchChange }) => {
   const pathname = usePathname()
   const { toTheme } = useToTheme()
 
@@ -64,7 +69,13 @@ export default function FloatingNavbar() {
         <View style={[styles.container, { paddingBottom: insets.bottom + 20 }]}>
           {isSearchVisible && (
             <View style={styles.searchInputWrapper}>
-              <ThemedTextInput placeholder="Search images..." style={styles.searchInput} autoFocus />
+              <ThemedTextInput
+                placeholder="Search images..."
+                style={styles.searchInput}
+                value={search}
+                onChangeText={onSearchChange}
+                autoFocus
+              />
             </View>
           )}
 
@@ -200,3 +211,5 @@ const styles = StyleSheet.create({
     }),
   },
 })
+
+export default FloatingNavbar
