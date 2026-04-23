@@ -1,12 +1,10 @@
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "react-native";
+import { type ColorName } from "@/constants/theme"
+import { useToTheme } from "./use-to-theme"
 
-export function useThemeColor(
-  colorName: keyof typeof Colors.light & keyof typeof Colors.dark,
-  option?: { light?: string; dark?: string },
-) {
-  const theme = useColorScheme() ?? "light";
-  const colorFromOption = option?.[theme];
+export function useThemeColor(colorName: ColorName, option?: { light?: string; dark?: string }) {
+  const { theme, toTheme } = useToTheme()
+  const colorFromOption = option?.[theme]
 
-  return colorFromOption ?? Colors[theme][colorName];
+  return colorFromOption ?? toTheme(colorName)
 }
+export { ColorName }

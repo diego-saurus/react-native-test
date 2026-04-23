@@ -1,18 +1,15 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
-import { StyleSheet, Text, TextProps } from "react-native";
+import { ColorName, useThemeColor } from "@/hooks/use-theme-color"
+import { StyleSheet, Text, TextProps } from "react-native"
 
 export type ThemedTextProps = TextProps & {
-  type?: keyof typeof styles;
-};
+  type?: keyof typeof styles
+  colorName?: ColorName
+}
 
-export function ThemedText({
-  style,
-  type = "default",
-  ...rest
-}: ThemedTextProps) {
-  const color = useThemeColor("text");
+const ThemedText = ({ style, colorName = "foreground", type = "default", ...rest }: ThemedTextProps) => {
+  const color = useThemeColor(colorName)
 
-  return <Text style={[{ color }, styles[type], style]} {...rest} />;
+  return <Text style={[{ color }, styles[type], style]} {...rest} />
 }
 
 const styles = StyleSheet.create({
@@ -31,12 +28,14 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
   subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "medium",
   },
   link: {
     lineHeight: 30,
     fontSize: 16,
     color: "#0a7ea4",
   },
-});
+})
+
+export default ThemedText
