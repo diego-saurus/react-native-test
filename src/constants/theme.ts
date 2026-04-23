@@ -4,9 +4,12 @@ const light = {
 
   primary: "#429BF4",
   "primary-foreground": "#FFFFFF",
+
   destructive: "#F4212E",
 
   muted: "#98A2B3",
+  "muted-foreground": "#0f1419",
+
   icon: "#687076",
   input: "#FCFCFD",
   border: "#D0D5DD",
@@ -18,9 +21,12 @@ const dark: typeof light = {
 
   primary: light.primary,
   "primary-foreground": light.primary,
+
   destructive: light.destructive,
 
   muted: "#E5E5E6",
+  "muted-foreground": "#72767a",
+
   icon: "#9BA1A6",
   input: "#22303c",
   border: "#242628",

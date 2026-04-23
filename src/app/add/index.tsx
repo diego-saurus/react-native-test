@@ -1,28 +1,19 @@
 import { useRouter } from "expo-router"
 import React, { useCallback, useState } from "react"
-import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-} from "react-native"
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import ThemedText from "@/components/atoms/themed-text"
+import ThemedButton from "@/components/atoms/themed-button"
 import ThemedView from "@/components/atoms/themed-view"
 import FormField from "@/components/molecules/form-field"
 import TextInputField from "@/components/molecules/text-input-field"
-import { useToTheme } from "@/hooks/use-to-theme"
+import { toSpacing } from "@/utils/theme"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
 export default function AddScreen() {
   const router = useRouter()
-  const { toTheme } = useToTheme()
   const insets = useSafeAreaInsets()
 
   const form = useForm({
@@ -70,23 +61,7 @@ export default function AddScreen() {
             </FormField>
           </FormProvider>
 
-          <Pressable
-            style={({ pressed }) => [
-              { backgroundColor: toTheme("primary") },
-              styles.button,
-              (pressed || loading) && styles.buttonDisabled,
-            ]}
-            onPress={onSubmit}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color={toTheme("background")} />
-            ) : (
-              <ThemedText style={[{ color: toTheme("primary-foreground") }, styles.buttonText]}>
-                Upload Image
-              </ThemedText>
-            )}
-          </Pressable>
+          <ThemedButton onPress={onSubmit} isLoading={loading} size="lg" title="Upload Image" />
         </ScrollView>
       </KeyboardAvoidingView>
     </ThemedView>
@@ -99,19 +74,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-  },
-  button: {
-    height: 54,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    fontSize: 18,
-    fontWeight: "600",
+    display: "flex",
+    flexDirection: "column",
+    gap: toSpacing(5),
   },
 })

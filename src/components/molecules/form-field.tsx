@@ -36,7 +36,6 @@ const FormField = <
 
 const styles = StyleSheet.create({
   label: {
-    marginTop: 20,
     marginBottom: 8,
     fontSize: 16,
   },
