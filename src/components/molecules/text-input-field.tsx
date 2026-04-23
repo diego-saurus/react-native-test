@@ -19,7 +19,12 @@ const TextInputField = ({ style, ...props }: Omit<TextInputProps, "editable" | "
       value={field.value?.toString()}
       placeholderTextColor={toTheme("muted")}
       style={[
-        { backgroundColor: toTheme("input"), color: toTheme("text"), borderColor: toTheme("border"), borderWidth: 1 },
+        {
+          backgroundColor: toTheme("input"),
+          color: toTheme("foreground"),
+          borderColor: toTheme("border"),
+          borderWidth: 1,
+        },
         styles.input,
         style,
       ]}
@@ -30,7 +35,6 @@ const TextInputField = ({ style, ...props }: Omit<TextInputProps, "editable" | "
 
 const styles = StyleSheet.create({
   input: {
-    height: toSpacing(11),
     borderRadius: radius.xl,
     paddingHorizontal: toSpacing(4),
     paddingVertical: toSpacing(3.5),

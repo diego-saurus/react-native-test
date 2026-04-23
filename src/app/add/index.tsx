@@ -6,9 +6,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import ThemedButton from "@/components/atoms/themed-button"
 import ThemedView from "@/components/atoms/themed-view"
 import FormField from "@/components/molecules/form-field"
+import { ImagePickerField } from "@/components/molecules/image-picker-field"
 import TextInputField from "@/components/molecules/text-input-field"
+
+import { imageAssetSchema } from "@/lib/schemas"
 import { toSpacing } from "@/utils/theme"
 import { zodResolver } from "@hookform/resolvers/zod"
+
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -21,6 +25,7 @@ export default function AddScreen() {
       z.object({
         author: z.string().min(5),
         description: z.string().min(10),
+        image: imageAssetSchema(),
       })
     ),
   })
@@ -36,7 +41,7 @@ export default function AddScreen() {
     }, 2000)
   }, [router])
 
-  const onSubmit = form.handleSubmit(() => handleSubmit())
+  const onSubmit = form.handleSubmit(handleSubmit)
 
   return (
     <ThemedView style={styles.container}>
@@ -47,6 +52,9 @@ export default function AddScreen() {
       >
         <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + 20 }]}>
           <FormProvider {...form}>
+            <FormField control={form.control} name="image">
+              <ImagePickerField />
+            </FormField>
             <FormField control={form.control} label="Author" name="author">
               <TextInputField placeholder="Enter author name..." />
             </FormField>
@@ -54,9 +62,10 @@ export default function AddScreen() {
             <FormField control={form.control} label="Image Details" name="description">
               <TextInputField
                 multiline={true}
-                numberOfLines={10}
+                numberOfLines={8}
                 placeholder="Tell us more about this image..."
                 style={{ height: 134 }}
+                textAlignVertical="top"
               />
             </FormField>
           </FormProvider>

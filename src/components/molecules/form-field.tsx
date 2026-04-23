@@ -23,7 +23,7 @@ const FormField = <
     <FormFieldProvider value={{ name }}>
       <View>
         {label && (
-          <ThemedText type="subtitle" style={styles.label}>
+          <ThemedText type="label" style={styles.label}>
             {label}
           </ThemedText>
         )}
@@ -37,7 +37,6 @@ const FormField = <
 const styles = StyleSheet.create({
   label: {
     marginBottom: 8,
-    fontSize: 16,
   },
 })
 

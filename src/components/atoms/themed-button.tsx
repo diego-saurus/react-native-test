@@ -17,12 +17,20 @@ interface ThemedButtonProps extends PressableProps {
 }
 
 const sizes = {
-  lg: { height: toSpacing(12), fontSize: fontSize.normal },
-  md: { height: toSpacing(10), fontSize: fontSize.sm },
-  sm: { height: toSpacing(9), fontSize: fontSize.xs },
+  lg: { height: toSpacing(12), fontSize: fontSize.normal, borderRadius: radius["2xl"] },
+  md: { height: toSpacing(10), fontSize: fontSize.sm, borderRadius: radius.lg },
+  sm: { height: toSpacing(9), fontSize: fontSize.xs, borderRadius: radius.md },
 }
 
-const ThemedButton: FC<ThemedButtonProps> = ({ variant = "primary", size = "md", isLoading, disabled, ...props }) => {
+const ThemedButton: FC<ThemedButtonProps> = ({
+  variant = "primary",
+  size = "md",
+  isLoading,
+  disabled,
+  style,
+  title,
+  ...props
+}) => {
   const { toTheme } = useToTheme()
 
   const variants = useMemo(
@@ -38,15 +46,16 @@ const ThemedButton: FC<ThemedButtonProps> = ({ variant = "primary", size = "md",
   )
 
   const { text, container, indicatorColor } = variants?.[variant] ?? variants.primary
-  const { height, fontSize } = sizes[size] ?? sizes.md
+  const { height, fontSize, borderRadius } = sizes[size] ?? sizes.md
 
   return (
     <Pressable
-      style={({ pressed }) => [
-        { height },
+      style={(s) => [
+        { height, borderRadius },
         container,
         styles.button,
-        (pressed || isLoading || disabled) && styles.buttonLoading,
+        (s.pressed || isLoading || disabled) && styles.buttonLoading,
+        style && typeof style === "function" ? style?.(s) : style,
       ]}
       disabled={disabled || isLoading}
       {...props}
@@ -54,7 +63,7 @@ const ThemedButton: FC<ThemedButtonProps> = ({ variant = "primary", size = "md",
       {isLoading ? (
         <ActivityIndicator color={indicatorColor} />
       ) : (
-        <ThemedText style={[{ fontSize }, text, styles.buttonText]}>Upload Image</ThemedText>
+        <ThemedText style={[{ fontSize }, text, styles.buttonText]}>{title}</ThemedText>
       )}
     </Pressable>
   )
@@ -62,9 +71,9 @@ const ThemedButton: FC<ThemedButtonProps> = ({ variant = "primary", size = "md",
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: radius.xl,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: toSpacing(4),
   },
   buttonLoading: { opacity: 0.6 },
   buttonText: { fontWeight: "semibold" },

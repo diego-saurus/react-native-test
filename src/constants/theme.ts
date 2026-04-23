@@ -32,15 +32,18 @@ const dark: typeof light = {
   border: "#242628",
 }
 
-export const SPACING_BASE = 4
-export const RADIUS_BASE = 8
+export const SPACING_BASE = 4 as const
+export const RADIUS_BASE = 8 as const
 
 export const radius = {
   sm: RADIUS_BASE - 4,
   md: RADIUS_BASE - 2,
   lg: RADIUS_BASE,
-  xl: RADIUS_BASE + 4,
-}
+  xl: RADIUS_BASE + 2,
+  "2xl": RADIUS_BASE + 4,
+  "3xl": RADIUS_BASE + 6,
+  "4xl": RADIUS_BASE + RADIUS_BASE,
+} as const
 
 export const fontSize = {
   xs: 12,
@@ -48,7 +51,7 @@ export const fontSize = {
   normal: 16,
   lg: 18,
   xl: 20,
-}
+} as const
 
 export type ColorName = keyof typeof Colors.light
 export const Colors = { light, dark }

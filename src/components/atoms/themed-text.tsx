@@ -1,3 +1,4 @@
+import { fontSize } from "@/constants/theme"
 import { ColorName, useThemeColor } from "@/hooks/use-theme-color"
 import { StyleSheet, Text, TextProps } from "react-native"
 
@@ -27,9 +28,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 32,
   },
-  subtitle: {
-    fontSize: 16,
+  label: {
+    fontSize: fontSize.normal,
     fontWeight: "medium",
+  },
+  description: {
+    fontSize: fontSize.sm,
+    fontWeight: "500",
+    color: "#667085",
+    lineHeight: 20,
   },
   link: {
     lineHeight: 30,
