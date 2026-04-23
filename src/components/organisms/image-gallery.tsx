@@ -1,0 +1,83 @@
+import ThemedView from "@/components/atoms/themed-view"
+import ImageCard from "@/components/molecules/image-card"
+import ImageCardSkeleton from "@/components/molecules/image-card-skeleton"
+import satellite from "@/lib/satellite"
+import { PicsumImage } from "@/types/picsum"
+import { toSpacing } from "@/utils/theme"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import React, { FC, useMemo } from "react"
+import { Dimensions, FlatList, StyleSheet } from "react-native"
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window")
+const numColumns = SCREEN_WIDTH > 600 ? 3 : 2
+
+interface ImageGalleryProps {
+  maxPage?: number
+}
+
+const ImageGallery: FC<ImageGalleryProps> = ({ maxPage = 10 }) => {
+  const { data, fetchNextPage, hasNextPage, refetch, isRefetching } = useInfiniteQuery({
+    queryKey: ["images", { maxPage }],
+    queryFn: ({ pageParam, signal }) =>
+      satellite<PicsumImage[]>("GET", "https://picsum.photos/v2/list", {
+        signal,
+        params: { page: pageParam, limit: 10 },
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (_lastPage, _allPage, lastParam) => {
+      const nextParam = lastParam + 1
+      if (nextParam > maxPage) return undefined
+      return nextParam
+    },
+  })
+
+  const flattenData = useMemo(() => data?.pages.flatMap((page) => page), [data])
+
+  const renderItem = ({ item }: { item: PicsumImage }) => <ImageCard item={item} />
+  return (
+    <FlatList
+      columnWrapperStyle={styles.columnWrapper}
+      contentContainerStyle={styles.listContent}
+      data={flattenData}
+      refreshing={isRefetching}
+      renderItem={renderItem}
+      onRefresh={() => refetch()}
+      onEndReached={() => fetchNextPage()}
+      keyExtractor={(item) => item.id}
+      numColumns={numColumns}
+      ListFooterComponent={
+        hasNextPage ? (
+          <ThemedView style={styles.footerContainer}>
+            {Array.from({ length: numColumns }).map((_, id) => (
+              <ImageCardSkeleton key={id} />
+            ))}
+          </ThemedView>
+        ) : null
+      }
+    />
+  )
+}
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+  },
+
+  listContent: {
+    paddingHorizontal: toSpacing(4),
+    gap: toSpacing(3),
+    paddingBottom: toSpacing(28),
+  },
+  columnWrapper: {
+    gap: toSpacing(3),
+  },
+  footerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: toSpacing(3),
+    marginTop: toSpacing(3),
+    paddingBottom: toSpacing(10),
+  },
+})
+
+export default ImageGallery

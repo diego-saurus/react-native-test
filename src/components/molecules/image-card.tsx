@@ -1,26 +1,21 @@
 import { fontSize, radius } from "@/constants/theme"
 import { blurhash } from "@/lib/expo-image"
+import { PicsumImage } from "@/types/picsum"
 import { toSpacing } from "@/utils/theme"
 import { Image } from "expo-image"
 import React, { FC } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import ThemedText from "../atoms/themed-text"
 
-interface ImageItem {
-  id: string
-  photographer: string
-  imageUrl: string
-}
-
 export interface ImageCardProps {
-  item: ImageItem
+  item: PicsumImage
 }
 
 const ImageCard: FC<ImageCardProps> = ({ item }) => (
   <TouchableOpacity activeOpacity={0.88} style={styles.card}>
-    <Image placeholder={{ blurhash }} source={{ uri: item.imageUrl }} style={styles.cardImage} contentFit="cover" />
+    <Image placeholder={{ blurhash }} source={{ uri: item.download_url }} style={styles.cardImage} contentFit="cover" />
     <ThemedText style={styles.cardName} numberOfLines={1}>
-      {item.photographer}
+      {item.author}
     </ThemedText>
   </TouchableOpacity>
 )
